@@ -8,14 +8,11 @@ defmodule GeoIP.Adapters.Base do
         Poison.decode!(body, as: %GeoIP.Location{})
       end
 
-      def cache_enabled?(), do: true
-      def cache_ttl_secs(), do: 3600
       def base_url(), do: "https://freegeoip.net"
-
       def lookup(host), do: host |> lookup_url |> HTTPoison.get
       defp lookup_url(host), do: "#{base_url}/json/#{host}"
 
-      defoverridable [map: 1, cache_enabled?: 0, cache_ttl_secs: 0, base_url: 0, lookup: 1]
+      defoverridable [map: 1, base_url: 0, lookup: 1]
     end
   end
 
@@ -30,8 +27,4 @@ defmodule GeoIP.Adapters.Base do
   Returns the base url used to retireve geoip data
   """
   @callback base_url() :: String.t
-
-  @callback cache_enabled?() :: Boolean.t
-
-  @callback cache_ttl_secs() :: Integer.t
 end

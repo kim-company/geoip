@@ -12,13 +12,12 @@ defmodule GeoIP do
   """
 
   use Application
-  @adapter Application.get_env(:geoip, :adapter)
 
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Cachex, [:geoip_lookup_cache, [default_ttl: :timer.seconds(@adapter.cache_ttl_secs)]])
+      worker(Cachex, [:geoip_lookup_cache, [default_ttl: :timer.seconds(Application.get_env(:geoip, :cache_ttl_secs))]])
     ]
 
     opts = [strategy: :one_for_one, name: GeoIP.Supervisor]

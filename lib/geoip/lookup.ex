@@ -25,11 +25,11 @@ defmodule GeoIP.Lookup do
   end
 
   defp get_from_cache(host) do
-    if @adapter.cache_enabled?, do: Cachex.get(:geoip_lookup_cache, host)
+    if Application.get_env(:geoip, :cache_enabled), do: Cachex.get(:geoip_lookup_cache, host)
   end
 
   defp put_in_cache({:ok, location} = result, host) do
-    if @adapter.cache_enabled?, do: Cachex.set(:geoip_lookup_cache, host, location)
+    if Application.get_env(:geoip, :cache_enabled), do: Cachex.set(:geoip_lookup_cache, host, location)
     result
   end
   defp put_in_cache(result, _), do: result
