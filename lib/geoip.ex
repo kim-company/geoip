@@ -18,7 +18,6 @@ defmodule GeoIP do
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
-     =
     children = [
       worker(Cachex, [:geoip_lookup_cache, [default_ttl: :timer.seconds(@cache_ttl)]])
     ]
