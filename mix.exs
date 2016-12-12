@@ -18,9 +18,17 @@ defmodule GeoIP.Mixfile do
 
   def application do
     [applications: [:logger, :httpoison, :cachex],
-     mod: {GeoIP, []}
+     mod: {GeoIP, []},
+     env: [
+       adapter: adapter(Mix.env),
+       cache_ttl_secs: 3600,
+       cache_enabled: true
+     ]
     ]
   end
+
+  defp adapter(:test), do: GeoIP.Adapters.Mocks.Default
+  defp adapter(_), do: GeoIP.Adapters.Default
 
   defp deps do
     [{:httpoison, "~> 0.9"},
