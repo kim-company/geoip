@@ -13,11 +13,14 @@ defmodule GeoIP do
 
   use Application
 
+  @cache_ttl Application.get_env(:geoip, :cache_ttl_secs)
+
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
+     =
     children = [
-      worker(Cachex, [:geoip_lookup_cache, [default_ttl: :timer.seconds(Application.get_env(:geoip, :cache_ttl_secs))]])
+      worker(Cachex, [:geoip_lookup_cache, [default_ttl: :timer.seconds(@cache_ttl)]])
     ]
 
     opts = [strategy: :one_for_one, name: GeoIP.Supervisor]
