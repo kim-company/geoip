@@ -18,17 +18,14 @@ defmodule GeoIP.Mixfile do
 
   def application do
     [applications: [:logger, :httpoison, :cachex],
-     mod: {GeoIP, []},
-     env: [url: "https://freegeoip.net",
-           cache: true,
-           cache_ttl_secs: 3600]]
+     mod: {GeoIP, []}
+    ]
   end
 
   defp deps do
     [{:httpoison, "~> 0.9"},
      {:poison, "~> 2.0"},
      {:cachex, "~> 1.2"},
-
      {:ex_doc, ">= 0.0.0", only: :dev}]
   end
 

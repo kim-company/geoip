@@ -12,13 +12,13 @@ defmodule GeoIP do
   """
 
   use Application
-  alias GeoIP.Config
+  @adapter Application.get_env(:geoip, :adapter)
 
   def start(_type, _args) do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Cachex, [:geoip_lookup_cache, [default_ttl: :timer.seconds(Config.cache_ttl_secs)]])
+      worker(Cachex, [:geoip_lookup_cache, [default_ttl: :timer.seconds(@adapter.cache_ttl_secs)]])
     ]
 
     opts = [strategy: :one_for_one, name: GeoIP.Supervisor]
@@ -42,5 +42,5 @@ defmodule GeoIP do
   {:ok, location} = GeoIP.lookup(conn)         # A `Plug.Conn` instance
   ```
   """
-  def lookup(host), do: GeoIP.Lookup.lookup(host)
+  def lookup(host), do: GeoIP.Lookup.call(host)
 end
