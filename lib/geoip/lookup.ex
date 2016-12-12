@@ -48,5 +48,5 @@ defmodule GeoIP.Lookup do
     {:error, %Error{reason: "Error looking up host: #{inspect(result)}"}}
   end
 
-  defp adapter(), do: Application.get_env(:geoip, :adapter)
+  defp adapter(), do: Application.get_env(:geoip, :adapter, GeoIP.Adapters.Default)
 end
