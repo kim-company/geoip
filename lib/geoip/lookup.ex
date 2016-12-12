@@ -1,8 +1,6 @@
 defmodule GeoIP.Lookup do
   alias GeoIP.{Location, Error}
 
-  @adapter Application.get_env(:geoip, :adapter)
-
   def call(nil), do: %Location{}
 
   def call(%{remote_ip: host}), do: call(host)
@@ -18,7 +16,7 @@ defmodule GeoIP.Lookup do
       {:ok, location} -> {:ok, location}
       _ ->
         host
-        |> @adapter.lookup()
+        |> adapter.lookup()
         |> parse_response
         |> put_in_cache(host)
     end
@@ -35,7 +33,7 @@ defmodule GeoIP.Lookup do
   defp put_in_cache(result, _), do: result
 
   defp parse_response({:ok, %HTTPoison.Response{status_code: 200, body: body}}) do
-    {:ok, @adapter.map(body)}
+    {:ok, adapter.map(body)}
   end
 
   defp parse_response({:ok, %HTTPoison.Response{status_code: _, body: body}}) do
@@ -49,4 +47,6 @@ defmodule GeoIP.Lookup do
   defp parse_response(result) do
     {:error, %Error{reason: "Error looking up host: #{inspect(result)}"}}
   end
+
+  defp adapter(), do: Application.get_env(:geoip, :adapter)
 end
