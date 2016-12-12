@@ -19,7 +19,7 @@ defmodule GeoIP do
     import Supervisor.Spec, warn: false
 
     children = [
-      worker(Cachex, [:geoip_lookup_cache, [default_ttl: :timer.seconds(@cache_ttl)]])
+      worker(Cachex, [:geoip_lookup_cache, [default_ttl: :timer.seconds(3600)]])
     ]
 
     opts = [strategy: :one_for_one, name: GeoIP.Supervisor]
